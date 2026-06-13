@@ -22,6 +22,12 @@ export const initialPool: Pool = {
     lockAt: kickoffAt,
     paidOnlyCompetes: true
   },
+  guesses: [],
+  auditLogs: []
+};
+
+export const seedPool: Pool = {
+  ...initialPool,
   guesses: [
     {
       id: "guess-001",
@@ -139,4 +145,8 @@ export const initialPool: Pool = {
 
 export function cloneInitialPool() {
   return JSON.parse(JSON.stringify(initialPool)) as Pool;
+}
+
+export function cloneSeedPool() {
+  return JSON.parse(JSON.stringify(seedPool)) as Pool;
 }

@@ -6,6 +6,7 @@ import { GET as getPool } from "./pool/route";
 import { POST as postGuess } from "./guesses/route";
 import { POST as loginAdmin } from "./admin/login/route";
 import { POST as postPayment } from "./admin/payments/route";
+import { seedPool } from "../../features/bolao/data/initialPool";
 
 let originalDataFile: string | null = null;
 const dataFilePath = join(process.cwd(), "data", "bolao-state.json");
@@ -30,6 +31,9 @@ describe("bolao api routes", () => {
     }
 
     await rm(dataFilePath, { force: true });
+    await mkdir(dirname(dataFilePath), { recursive: true });
+    await writeFile(dataFilePath, JSON.stringify(seedPool, null, 2), "utf8");
+
     process.env.ADMIN_PIN = "2026";
     process.env.SESSION_SECRET = "test-session-secret";
     process.env.BOLAO_NOW = "2026-06-13T12:00:00-03:00";

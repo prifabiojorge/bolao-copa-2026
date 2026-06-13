@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cloneInitialPool } from "../data/initialPool";
+import { cloneInitialPool, cloneSeedPool } from "../data/initialPool";
 import {
   calculateLedger,
   calculatePrizeDistribution,
@@ -10,7 +10,7 @@ import { runPoolEvent } from "./orchestrator";
 
 describe("bolao rules", () => {
   it("calculates gross, organizer fee and prize from paid guesses", () => {
-    const pool = cloneInitialPool();
+    const pool = cloneSeedPool();
     const ledger = calculateLedger(pool);
 
     expect(ledger.paidGuesses).toHaveLength(3);
@@ -21,7 +21,7 @@ describe("bolao rules", () => {
   });
 
   it("rejects more than two draw guesses for the same participant", () => {
-    const pool = cloneInitialPool();
+    const pool = cloneSeedPool();
     pool.guesses.push(
       {
         id: "draw-1",
@@ -62,7 +62,7 @@ describe("bolao rules", () => {
   });
 
   it("ignores pending guesses when distributing prizes", () => {
-    const pool = cloneInitialPool();
+    const pool = cloneSeedPool();
     pool.officialResult = {
       homeScore: 2,
       awayScore: 1,
@@ -77,7 +77,7 @@ describe("bolao rules", () => {
   });
 
   it("locks new guesses after the match deadline", () => {
-    const pool = cloneInitialPool();
+    const pool = cloneSeedPool();
 
     const result = validateGuessDraft(
       pool,
@@ -94,8 +94,8 @@ describe("bolao rules", () => {
   });
 
   it("resets the pool through the orchestrator", () => {
-    const pool = cloneInitialPool();
-    pool.guesses = [];
+    const pool = cloneSeedPool();
+    expect(pool.guesses).toHaveLength(8);
 
     const outcome = runPoolEvent(
       pool,
@@ -107,13 +107,13 @@ describe("bolao rules", () => {
     );
 
     expect(outcome.accepted).toBe(true);
-    expect(outcome.pool.guesses).toHaveLength(8);
+    expect(outcome.pool.guesses).toHaveLength(0); // initialPool has 0 guesses now
     expect(outcome.pool.auditLogs[0].action).toBe("Bolao restaurado");
   });
 
   describe("calculatePrizeOutcome", () => {
     it("returns awaiting_result if there is no official result yet", () => {
-      const pool = cloneInitialPool();
+      const pool = cloneSeedPool();
       // Ensure no official result
       delete pool.officialResult;
 
@@ -128,7 +128,7 @@ describe("bolao rules", () => {
     });
 
     it("returns no_paid_guesses if there are no paid guesses in the pool", () => {
-      const pool = cloneInitialPool();
+      const pool = cloneSeedPool();
       pool.guesses = pool.guesses.map(g => ({ ...g, paymentStatus: "pending" }));
       pool.officialResult = { homeScore: 2, awayScore: 1, publishedAt: "2026-06-13T21:00:00Z" };
 
@@ -140,7 +140,7 @@ describe("bolao rules", () => {
     });
 
     it("returns no_winners if no paid guess matches the official result", () => {
-      const pool = cloneInitialPool();
+      const pool = cloneSeedPool();
       // Placar oficial is 5x5, which nobody guessed
       pool.officialResult = { homeScore: 5, awayScore: 5, publishedAt: "2026-06-13T21:00:00Z" };
 
@@ -155,7 +155,7 @@ describe("bolao rules", () => {
     });
 
     it("returns winners_found when one or more paid guesses match", () => {
-      const pool = cloneInitialPool();
+      const pool = cloneSeedPool();
       // Placar is 2x1 (Ozeas has a paid guess of 2x1)
       pool.officialResult = { homeScore: 2, awayScore: 1, publishedAt: "2026-06-13T21:00:00Z" };
 
