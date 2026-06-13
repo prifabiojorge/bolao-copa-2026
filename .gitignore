@@ -1,0 +1,10 @@
+.next
+node_modules
+out
+dist
+coverage
+.env
+.env.local
+*.tsbuildinfo
+data/bolao-state.json
+data/bolao-state.json.tmp

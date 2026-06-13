@@ -1,0 +1,12 @@
+⚠ Slow filesystem detected. The benchmark took 612ms. If E:\Documents\bolao-copa\.next/dev is a network drive, consider moving it to a local folder.
+See more: https://nextjs.org/docs/app/guides/local-development
+[browser] ⨯ unhandledRejection: TypeError: Failed to fetch
+    at usePoolApi.useCallback[refresh] (src/features/bolao/hooks/usePoolApi.ts:34:33)
+    at usePoolApi.useEffect.interval (src/features/bolao/hooks/usePoolApi.ts:49:10)
+  32 |   const [serverNow, setServerNow] = useState<string | null>(null);
+  33 |   const [loaded, setLoaded] = useState(false);
+> 34 |   const [message, setMessage] = useState<ApiMessage | null>(null);
+     |                                 ^
+  35 |
+  36 |   const refresh = useCallback(async () => {
+  37 |     const response = await fetch("/api/pool", {
