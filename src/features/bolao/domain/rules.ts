@@ -1,4 +1,4 @@
-import type { Guess, GuessDraft, Ledger, Pool, PrizeAllocation } from "./types";
+import type { Guess, GuessDraft, Ledger, Pool, PrizeAllocation, PrizeOutcome } from "./types";
 
 export const currencyFormatter = new Intl.NumberFormat("pt-BR", {
   currency: "BRL",
@@ -105,6 +105,73 @@ export function calculatePrizeDistribution(pool: Pool): PrizeAllocation[] {
     guess,
     amountCents: baseAmount + (index < remainder ? 1 : 0)
   }));
+}
+
+export function calculatePrizeOutcome(pool: Pool): PrizeOutcome {
+  const ledger = calculateLedger(pool);
+
+  if (!pool.officialResult) {
+    return {
+      scenario: "awaiting_result",
+      label: "Aguardando resultado oficial",
+      winners: [],
+      grossCents: ledger.grossCents,
+      organizerCommissionCents: ledger.organizerFeeCents,
+      prizePoolCents: ledger.prizePoolCents,
+      unclaimedPrizeCents: 0,
+      organizerTotalCents: ledger.organizerFeeCents
+    };
+  }
+
+  if (ledger.paidGuesses.length === 0) {
+    return {
+      scenario: "no_paid_guesses",
+      label: "Nenhum palpite pago registrado",
+      winners: [],
+      grossCents: 0,
+      organizerCommissionCents: 0,
+      prizePoolCents: 0,
+      unclaimedPrizeCents: 0,
+      organizerTotalCents: 0
+    };
+  }
+
+  const winners = getExactWinners(pool);
+
+  if (winners.length === 0) {
+    return {
+      scenario: "no_winners",
+      label: "Acumulado! Ninguém acertou o placar oficial",
+      winners: [],
+      grossCents: ledger.grossCents,
+      organizerCommissionCents: ledger.organizerFeeCents,
+      prizePoolCents: ledger.prizePoolCents,
+      unclaimedPrizeCents: ledger.prizePoolCents,
+      organizerTotalCents: ledger.grossCents
+    };
+  }
+
+  const baseAmount = Math.floor(ledger.prizePoolCents / winners.length);
+  const remainder = ledger.prizePoolCents % winners.length;
+  const allocations: PrizeAllocation[] = winners.map((guess, index) => ({
+    guess,
+    amountCents: baseAmount + (index < remainder ? 1 : 0)
+  }));
+
+  const label = winners.length === 1 
+    ? "Ganhador encontrou o placar exato!" 
+    : `${winners.length} ganhadores dividiram o prêmio!`;
+
+  return {
+    scenario: "winners_found",
+    label,
+    winners: allocations,
+    grossCents: ledger.grossCents,
+    organizerCommissionCents: ledger.organizerFeeCents,
+    prizePoolCents: ledger.prizePoolCents,
+    unclaimedPrizeCents: 0,
+    organizerTotalCents: ledger.organizerFeeCents
+  };
 }
 
 export function formatKickoff(isoDate: string) {

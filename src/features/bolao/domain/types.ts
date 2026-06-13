@@ -74,3 +74,20 @@ export interface PrizeAllocation {
   guess: Guess;
   amountCents: number;
 }
+
+export type PrizeScenario =
+  | "awaiting_result"
+  | "winners_found"
+  | "no_winners"
+  | "no_paid_guesses";
+
+export interface PrizeOutcome {
+  scenario: PrizeScenario;
+  label: string;
+  winners: PrizeAllocation[];
+  grossCents: number;
+  organizerCommissionCents: number;
+  prizePoolCents: number;
+  unclaimedPrizeCents: number;
+  organizerTotalCents: number;
+}

@@ -1002,3 +1002,224 @@ tbody tr:hover {
     grid-row: 3;
   }
 }
+
+/* Custom Prize Outcome Panel & Premium Cards */
+.prize-outcome-panel {
+  margin-top: 6px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.prize-outcome-header {
+  padding: 24px;
+  background: linear-gradient(135deg, #095c3b 0%, #117a4f 100%);
+  color: #ffffff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.prize-outcome-header.accumulated {
+  background: linear-gradient(135deg, #7c5c02 0%, #a4811a 100%);
+}
+
+.prize-outcome-header.no-paid {
+  background: linear-gradient(135deg, #5a6962 0%, #76877e 100%);
+}
+
+.prize-outcome-header.projected {
+  background: linear-gradient(135deg, #1b2420 0%, #2f3f38 100%);
+}
+
+.prize-badge {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.prize-outcome-title {
+  font-size: 1.6rem;
+  font-weight: 850;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.prize-outcome-subtitle {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.prize-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 24px;
+  padding: 24px;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 768px) {
+  .prize-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.prize-outcome-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.prize-outcome-details {
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.prize-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--line);
+  font-size: 0.9rem;
+}
+
+.prize-detail-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.prize-detail-row .value {
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.prize-detail-row.total {
+  border-bottom: none;
+  padding-top: 4px;
+  font-size: 1.05rem;
+}
+
+.prize-detail-row.total .value {
+  color: var(--green);
+  font-size: 1.3rem;
+  font-weight: 900;
+}
+
+.prize-detail-row.total.accumulated-total .value {
+  color: #a4811a;
+}
+
+.winners-card-list {
+  display: grid;
+  gap: 12px;
+}
+
+.winner-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.winner-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+}
+
+.winner-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.winner-name {
+  font-weight: 850;
+  font-size: 1.05rem;
+  color: var(--ink);
+}
+
+.winner-guess-tag {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.winner-prize-amount {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--green);
+  background: #eaf8f1;
+  padding: 6px 14px;
+  border-radius: var(--radius);
+  border: 1px solid #cfe6d8;
+}
+
+.projection-scenario-box {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-left: 4px solid var(--green);
+}
+
+.projection-scenario-box.accumulated {
+  border-left-color: #a4811a;
+}
+
+.projection-scenario-title {
+  font-weight: 850;
+  font-size: 0.95rem;
+  color: var(--ink);
+  margin: 0;
+}
+
+.projection-scenario-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.projection-value {
+  font-weight: 900;
+  font-size: 1.1rem;
+  color: var(--green-deep);
+}
+
+.projection-value.bank-value {
+  color: #7c5c02;
+}
+

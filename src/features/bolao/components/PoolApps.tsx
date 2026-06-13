@@ -21,7 +21,12 @@ import {
   ShieldCheck,
   Trophy,
   Unlock,
-  UserPlus
+  UserPlus,
+  Award,
+  TrendingUp,
+  UserCheck,
+  Coins,
+  AlertCircle
 } from "lucide-react";
 import Link from "next/link";
 import { FormEvent, useEffect, useMemo, useState } from "react";
@@ -226,6 +231,180 @@ function FinancialSummary({
   );
 }
 
+function PrizeOutcomePanel({
+  pool,
+  prizeOutcome
+}: {
+  pool: Pool;
+  prizeOutcome: ReturnType<typeof usePoolApi>["prizeOutcome"];
+}) {
+  const { scenario, label, winners, grossCents, organizerCommissionCents, prizePoolCents, unclaimedPrizeCents, organizerTotalCents } = prizeOutcome;
+
+  if (scenario === "no_paid_guesses") {
+    return (
+      <div className="prize-outcome-panel">
+        <div className="prize-outcome-header no-paid">
+          <span className="prize-badge">
+            <AlertCircle size={14} /> Sem Palpites Pagos
+          </span>
+          <h3 className="prize-outcome-title">{label}</h3>
+          <p className="prize-outcome-subtitle">
+            Nenhum palpite com pagamento confirmado participa da divisão.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (scenario === "awaiting_result") {
+    return (
+      <div className="prize-outcome-panel">
+        <div className="prize-outcome-header projected">
+          <span className="prize-badge">
+            <TrendingUp size={14} /> Projeção de Premiação
+          </span>
+          <h3 className="prize-outcome-title">Guia de Premiação</h3>
+          <p className="prize-outcome-subtitle">
+            Veja abaixo como o prêmio será distribuído após a publicação do resultado oficial.
+          </p>
+        </div>
+        <div className="prize-grid">
+          <div className="prize-outcome-main">
+            <div className="projection-scenario-box">
+              <h4 className="projection-scenario-title">Cenário A: Com Ganhadores</h4>
+              <p className="projection-scenario-desc">
+                Se um ou mais participantes acertarem o placar oficial, o prêmio líquido total será dividido igualmente entre eles.
+              </p>
+              <div className="projection-value">
+                Rateio de {formatCents(prizePoolCents)} dividido entre os acertadores.
+              </div>
+            </div>
+            <div className="projection-scenario-box accumulated">
+              <h4 className="projection-scenario-title">Cenário B: Acumulado (Ninguém acertou)</h4>
+              <p className="projection-scenario-desc">
+                Caso nenhum participante acertar o placar oficial, o prêmio líquido vai para a Banca (organizador) para cobrir custos e acúmulo.
+              </p>
+              <div className="projection-value bank-value">
+                Banca recebe o prêmio de {formatCents(prizePoolCents)} + comissão de {formatCents(organizerCommissionCents)}.
+              </div>
+            </div>
+          </div>
+          <div className="prize-outcome-details">
+            <h3>Detalhes Financeiros</h3>
+            <div className="prize-detail-row">
+              <span>Arrecadação Bruta:</span>
+              <span className="value">{formatCents(grossCents)}</span>
+            </div>
+            <div className="prize-detail-row">
+              <span>Taxa da Banca (20%):</span>
+              <span className="value">{formatCents(organizerCommissionCents)}</span>
+            </div>
+            <div className="prize-detail-row total">
+              <span>Prêmio Líquido (80%):</span>
+              <span className="value">{formatCents(prizePoolCents)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (scenario === "no_winners") {
+    return (
+      <div className="prize-outcome-panel">
+        <div className="prize-outcome-header accumulated">
+          <span className="prize-badge">
+            <Landmark size={14} /> Bolão Acumulado
+          </span>
+          <h3 className="prize-outcome-title">{label}</h3>
+          <p className="prize-outcome-subtitle">
+            Placar oficial: Brasil {pool.officialResult?.homeScore} x {pool.officialResult?.awayScore} Marrocos. Nenhum palpite acertou em cheio.
+          </p>
+        </div>
+        <div className="prize-grid">
+          <div className="prize-outcome-main">
+            <div className="projection-scenario-box accumulated">
+              <h4 className="projection-scenario-title">Prêmio Destinado à Banca</h4>
+              <p className="projection-scenario-desc">
+                Como ninguém acertou o placar oficial, os {formatCents(unclaimedPrizeCents)} do prêmio líquido acumulado foram destinados ao organizador do bolão.
+              </p>
+            </div>
+          </div>
+          <div className="prize-outcome-details">
+            <h3>Resultado Financeiro</h3>
+            <div className="prize-detail-row">
+              <span>Arrecadação Total:</span>
+              <span className="value">{formatCents(grossCents)}</span>
+            </div>
+            <div className="prize-detail-row">
+              <span>Comissão Operacional (20%):</span>
+              <span className="value">{formatCents(organizerCommissionCents)}</span>
+            </div>
+            <div className="prize-detail-row">
+              <span>Prêmio acumulado:</span>
+              <span className="value">{formatCents(unclaimedPrizeCents)}</span>
+            </div>
+            <div className="prize-detail-row total accumulated-total">
+              <span>Total para a Banca:</span>
+              <span className="value">{formatCents(organizerTotalCents)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // scenario === "winners_found"
+  return (
+    <div className="prize-outcome-panel">
+      <div className="prize-outcome-header">
+        <span className="prize-badge">
+          <Trophy size={14} /> Ganhadores Encontrados!
+        </span>
+        <h3 className="prize-outcome-title">{label}</h3>
+        <p className="prize-outcome-subtitle">
+          Placar oficial: Brasil {pool.officialResult?.homeScore} x {pool.officialResult?.awayScore} Marrocos.
+        </p>
+      </div>
+      <div className="prize-grid">
+        <div className="prize-outcome-main">
+          <h3>Lista de Acertadores</h3>
+          <div className="winners-card-list">
+            {winners.map((allocation) => (
+              <div className="winner-card" key={allocation.guess.id}>
+                <div className="winner-info">
+                  <span className="winner-name">{allocation.guess.participantName}</span>
+                  <span className="winner-guess-tag">
+                    Palpite: Brasil {allocation.guess.homeScore} x {allocation.guess.awayScore} Marrocos
+                  </span>
+                </div>
+                <div className="winner-prize-amount">
+                  {formatCents(allocation.amountCents)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="prize-outcome-details">
+          <h3>Partilha do Prêmio</h3>
+          <div className="prize-detail-row">
+            <span>Arrecadação Bruta:</span>
+            <span className="value">{formatCents(grossCents)}</span>
+          </div>
+          <div className="prize-detail-row">
+            <span>Taxa do Responsável (20%):</span>
+            <span className="value">{formatCents(organizerCommissionCents)}</span>
+          </div>
+          <div className="prize-detail-row total">
+            <span>Total Distribuído:</span>
+            <span className="value">{formatCents(prizePoolCents)}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function StatusPanel({
   loaded,
   locked,
@@ -425,7 +604,7 @@ function HarnessPanel() {
 
 export function ApostadorApp() {
   useVisualViewportWidth();
-  const { ledger, loaded, locked, message, pool, registerGuess } = usePoolApi();
+  const { ledger, loaded, locked, message, pool, prizeOutcome, registerGuess } = usePoolApi();
 
   return (
     <main className="app-shell">
@@ -441,6 +620,7 @@ export function ApostadorApp() {
           />
         </section>
         <FinancialSummary ledger={ledger} pool={pool} />
+        <PrizeOutcomePanel pool={pool} prizeOutcome={prizeOutcome} />
         <section className="public-grid">
           <div className="panel">
             <div className="panel-header">
@@ -624,11 +804,11 @@ function AdminTools({
 
 function ResultPanel({
   pool,
-  prizeDistribution,
+  prizeOutcome,
   onPublish
 }: {
   pool: Pool;
-  prizeDistribution: ReturnType<typeof usePoolApi>["prizeDistribution"];
+  prizeOutcome: ReturnType<typeof usePoolApi>["prizeOutcome"];
   onPublish: (homeScore: number, awayScore: number) => Promise<ApiMessage>;
 }) {
   const [homeScore, setHomeScore] = useState("2");
@@ -643,8 +823,8 @@ function ResultPanel({
     <div className="panel">
       <div className="panel-header">
         <div>
-          <h2>Resultado e premio</h2>
-          <p>Publique o placar oficial para calcular os ganhadores pagos.</p>
+          <h2>Resultado oficial</h2>
+          <p>Publique o placar oficial do jogo para calcular a divisão final de prêmios.</p>
         </div>
       </div>
       <form className="result-box" onSubmit={handleSubmit}>
@@ -678,25 +858,8 @@ function ResultPanel({
           Publicar resultado
         </button>
       </form>
-      <div className="winner-list">
-        {pool.officialResult ? (
-          <div className="message ok">
-            Resultado oficial: Brasil {pool.officialResult.homeScore} x {pool.officialResult.awayScore}{" "}
-            Marrocos.
-          </div>
-        ) : (
-          <p className="empty-state">Aguardando resultado oficial.</p>
-        )}
-        {prizeDistribution.length > 0 ? (
-          prizeDistribution.map((allocation) => (
-            <div className="winner-row" key={allocation.guess.id}>
-              <strong>{allocation.guess.participantName}</strong>
-              <span>{formatCents(allocation.amountCents)}</span>
-            </div>
-          ))
-        ) : pool.officialResult ? (
-          <p className="empty-state">Nenhum palpite pago acertou o placar exato.</p>
-        ) : null}
+      <div style={{ padding: "0 18px 18px" }}>
+        <PrizeOutcomePanel pool={pool} prizeOutcome={prizeOutcome} />
       </div>
     </div>
   );
@@ -740,7 +903,7 @@ export function AdminApp() {
     login,
     message,
     pool,
-    prizeDistribution,
+    prizeOutcome,
     publishResult,
     resetPool,
     setPayment
@@ -788,7 +951,7 @@ export function AdminApp() {
             <AdminGuessTable guesses={pool.guesses} onSetPayment={setPayment} />
           </div>
           <div className="section-stack">
-            <ResultPanel pool={pool} prizeDistribution={prizeDistribution} onPublish={publishResult} />
+            <ResultPanel pool={pool} prizeOutcome={prizeOutcome} onPublish={publishResult} />
             <AuditPanel pool={pool} />
           </div>
         </section>

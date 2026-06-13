@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { cloneInitialPool } from "../data/initialPool";
-import { calculateLedger, calculatePrizeDistribution } from "../domain/rules";
+import { calculateLedger, calculatePrizeDistribution, calculatePrizeOutcome } from "../domain/rules";
 import type { GuessDraft, PaymentStatus, Pool } from "../domain/types";
 
 export interface ApiMessage {
@@ -123,6 +123,7 @@ export function usePoolApi() {
 
   const ledger = useMemo(() => calculateLedger(pool), [pool]);
   const prizeDistribution = useMemo(() => calculatePrizeDistribution(pool), [pool]);
+  const prizeOutcome = useMemo(() => calculatePrizeOutcome(pool), [pool]);
   const locked = useMemo(() => {
     const referenceDate = serverNow ? new Date(serverNow) : new Date();
     return referenceDate >= new Date(pool.rules.lockAt);
@@ -136,6 +137,7 @@ export function usePoolApi() {
     message,
     pool,
     prizeDistribution,
+    prizeOutcome,
     publishResult,
     refresh,
     registerGuess,
