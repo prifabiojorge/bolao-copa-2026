@@ -10,3 +10,21 @@ See more: https://nextjs.org/docs/app/guides/local-development
   35 |
   36 |   const refresh = useCallback(async () => {
   37 |     const response = await fetch("/api/pool", {
+⨯ Error: ENOENT: no such file or directory, rename 'E:\Documents\bolao-copa\data\bolao-state.json.tmp' -> 'E:\Documents\bolao-copa\data\bolao-state.json'
+    at async writePoolFile (src\server\poolStore.ts:46:3)
+    at async ensureDataFile (src\server\poolStore.ts:32:5)
+    at async readPoolFile (src\server\poolStore.ts:37:3)
+    at async GET (src\app\api\pool\route.ts:7:16)
+  44 |   await mkdir(dirname(dataFilePath), { recursive: true });
+  45 |   await writeFile(tmpPath, JSON.stringify(pool, null, 2), "utf8");
+> 46 |   await rename(tmpPath, dataFilePath);
+     |   ^
+  47 | }
+  48 |
+  49 | // --------------------------------------------------------------------------- {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'rename',
+  path: 'E:\\Documents\\bolao-copa\\data\\bolao-state.json.tmp',
+  dest: 'E:\\Documents\\bolao-copa\\data\\bolao-state.json'
+}

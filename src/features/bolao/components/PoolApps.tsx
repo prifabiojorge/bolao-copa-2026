@@ -87,7 +87,9 @@ function Topbar({ mode }: { mode: "admin" | "apostador" }) {
         <div className="brand">
           <div className="brand-mark">BC</div>
           <div>
-            <p className="brand-title">Bolao da Copa 2026</p>
+            <p className="brand-title">
+              {mode === "apostador" ? "Bolão do Fábio Fabuloso" : "Bolão da Copa 2026"}
+            </p>
             <p className="brand-subtitle">
               {mode === "admin" ? "Ambiente do administrador" : "Ambiente do apostador"}
             </p>
