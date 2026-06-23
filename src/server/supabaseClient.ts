@@ -6,7 +6,7 @@ let cachedClient: SupabaseClient | null = null;
 
 /**
  * Retorna o cliente Supabase configurado com a service_role key.
- * Retorna `null` se as variáveis de ambiente não estiverem definidas,
+ * Retorna `null` se as variaveis de ambiente nao estiverem definidas,
  * sinalizando que o fallback para arquivo local deve ser usado.
  */
 export function getSupabaseClient(): SupabaseClient | null {

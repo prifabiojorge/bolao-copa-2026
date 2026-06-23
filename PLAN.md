@@ -43,8 +43,8 @@ O Arquiteto organiza o produto em camadas para evolucao segura:
 - `src/features/bolao/domain`: regras, calculos, orquestracao e contrato de dados.
 - `src/features/bolao/data`: carga inicial do bolao informado pelo usuario.
 - `src/features/bolao/hooks`: integracao UI-API.
-- `src/server`: sessao administrativa e store server-side.
-- `data`: arquivo JSON centralizado para sincronizacao local.
+- `src/server`: sessao administrativa, store server-side e cliente Supabase opcional.
+- `data`: arquivo JSON centralizado para sincronizacao local quando Supabase nao estiver configurado.
 - `memoria`: resiliencia da execucao, progresso e decisoes.
 
 ## Entrega do MVP
@@ -60,6 +60,7 @@ O Arquiteto organiza o produto em camadas para evolucao segura:
 - Exportacao CSV e JSON.
 - PIN local para proteger acoes administrativas.
 - Documentacao de execucao e memoria.
+- Supabase opcional para deploy simples com persistencia remota.
 
 ## Validacao
 

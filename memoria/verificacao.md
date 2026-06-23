@@ -1,8 +1,19 @@
-# Verificacao Final
+# Verificacoes do Projeto
 
 Data local da verificacao: 13/06/2026.
 
-## Comandos
+## Revisao de Endosso
+
+Data local da revisao: 23/06/2026.
+
+- `npm run typecheck` passou.
+- `npm audit --omit=dev` retornou 0 vulnerabilidades.
+- `npm run build` passou quando executado com `NEXT_PUBLIC_SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` vazios.
+- `npm test` falhou sem relatorio detalhado do Vitest. A falha tambem ocorreu ao rodar arquivos de teste isolados. Tratar como pendencia de runner/ambiente ate nova investigacao.
+- Conferido que a memoria foi atualizada para Supabase opcional, fallback JSON, `initialPool` limpo, `seedPool` com os 8 palpites originais e regra de premio acumulado sem ganhadores.
+- Conferido que `data/bolao-state.json` estava limpo, com `guesses: []`, em 23/06/2026.
+
+## Comandos Historicos de 13/06/2026
 
 - `npm run typecheck` passou.
 - `npm test` passou com 2 arquivos e 9 testes.

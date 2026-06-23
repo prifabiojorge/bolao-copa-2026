@@ -1,12 +1,12 @@
 # Decisoes de Arquitetura
 
-## ADR-001 - MVP com persistencia server-side simples
+## ADR-001 - Persistencia server-side simples com Supabase opcional
 
-Decisao: entregar a versao atual como app Next.js com estado persistido em arquivo JSON server-side: `data/bolao-state.json`.
+Decisao: entregar a versao atual como app Next.js com estado persistido server-side. Em desenvolvimento local, usar `data/bolao-state.json`. Em ambiente com variaveis Supabase configuradas, usar tabela `bolao_state`.
 
-Motivo: o usuario pediu sincronizacao por servidor simples para que admin e apostadores vejam o mesmo estado em dispositivos diferentes. O arquivo JSON centralizado mantem o MVP leve e evita banco real neste ciclo.
+Motivo: o usuario pediu sincronizacao por servidor simples para que admin e apostadores vejam o mesmo estado em dispositivos diferentes. O arquivo JSON centralizado mantem o MVP leve. Supabase foi adicionado como opcao de deploy sem exigir reescrita do dominio.
 
-Consequencia: o MVP e adequado para um unico servidor Next.js local ou deploy simples. Para multi-instancia ou uso comercial, a proxima etapa deve adicionar banco de dados real, autenticacao completa, permissoes e politica de backup.
+Consequencia: o MVP e adequado para um unico servidor Next.js local ou deploy simples. Se usar Supabase, configurar `NEXT_PUBLIC_SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY`. Para uso comercial, ainda faltam autenticacao completa, permissoes e politica de backup.
 
 ## ADR-002 - Palpites pendentes continuam publicos
 
@@ -31,3 +31,15 @@ Motivo: o participante precisa de uma experiencia direta: regras, palpite, statu
 Decisao: a lista publica usa mini bandeiras desenhadas em CSS para Brasil e Marrocos.
 
 Motivo: no ambiente do usuario, emojis de bandeira apareceram como letras `BR` e `MA`. CSS torna a exibicao estavel em Windows, Chrome e outros ambientes.
+
+## ADR-006 - `initialPool` limpo e `seedPool` como referencia
+
+Decisao: `initialPool` representa um bolao limpo, sem palpites. `seedPool` guarda os 8 palpites originais informados pelo usuario.
+
+Motivo: permite restaurar o bolao para uma lista vazia sem perder a referencia historica dos palpites iniciais em testes e documentacao.
+
+## ADR-007 - Premio acumulado para banca sem ganhadores
+
+Decisao: se o resultado oficial for publicado e nenhum palpite pago acertar o placar exato, o premio liquido fica como acumulado para a banca/organizador.
+
+Motivo: a interface passou a explicar explicitamente o cenario sem ganhadores. Essa regra deve continuar clara para evitar duvida depois do jogo.

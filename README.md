@@ -18,7 +18,7 @@ Rotas principais:
 
 PIN local padrao do administrador: `2026`.
 
-Copie `.env.example` para `.env.local` para trocar `ADMIN_PIN` e `SESSION_SECRET`.
+Copie `.env.example` para `.env.local` para trocar `ADMIN_PIN`, `SESSION_SECRET` e, se desejar, configurar Supabase.
 
 ## Validar
 
@@ -37,8 +37,9 @@ npm run build
 - Apenas palpites pagos competem.
 - Palpites sao bloqueados a partir de 13/06/2026 as 19:00, America/Fortaleza.
 - Auditoria visivel registra mudancas operacionais.
-- Estado sincronizado via arquivo `data/bolao-state.json`.
+- Estado sincronizado via Supabase opcional ou arquivo local `data/bolao-state.json`.
 - Acoes administrativas protegidas por PIN e cookie HttpOnly.
+- Se nao houver ganhador pago por placar exato, o premio liquido fica acumulado para a banca/organizador.
 
 ## Nota legal
 

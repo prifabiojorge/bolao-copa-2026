@@ -2,6 +2,26 @@
 
 Este arquivo e a porta de entrada para qualquer IA ou pessoa que precise continuar o trabalho com calma e sem adivinhar o contexto.
 
+## Revisao de endosso - 23/06/2026
+
+Revisao feita no workspace `E:\Documents\bolao-copa`.
+
+Endosso geral: a memoria esta agradavel, util e alinhada com a maior parte do codigo. O produto continua com uma separacao clara entre apostador e administrador, com foco em transparencia e uso simples no celular.
+
+Ajustes importantes desta revisao:
+
+- A persistencia nao e mais apenas JSON local: existe Supabase opcional em `src/server/supabaseClient.ts`, com fallback para arquivo JSON.
+- `initialPool` agora representa um bolao limpo, sem palpites.
+- `seedPool` guarda os 8 palpites originais usados como referencia e em testes.
+- O arquivo runtime `data/bolao-state.json` estava limpo em 23/06/2026, com `guesses: []`.
+- O dominio tem uma regra explicita de resultado sem ganhadores: o premio liquido nao reclamado vai para a banca/organizador.
+- `npm run typecheck` passou em 23/06/2026.
+- `npm audit --omit=dev` passou em 23/06/2026 com 0 vulnerabilidades.
+- `npm run build` passou em 23/06/2026 quando executado com `NEXT_PUBLIC_SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` vazios.
+- `npm test` falhou em 23/06/2026 sem relatorio detalhado do Vitest; isso deve ser investigado antes de declarar a suite de testes como verde novamente.
+- `memoria/dev-server.err.log` mostra `Supabase read error: TypeError: fetch failed`; se Supabase estiver configurado e inacessivel, o app nao faz fallback automatico para JSON.
+- A URL `https://hotjqxymmmlurnpkgipq.supabase.co` foi conferida em `.env.local` e a tabela `bolao_state` respondeu com sucesso via service role local.
+
 ## Ideia do produto
 
 O projeto e um micro-SaaS simples para administrar um bolao privado do jogo Brasil x Marrocos da Copa 2026.
@@ -28,6 +48,13 @@ Rotas principais:
 - `/admin`: tela do responsavel, protegida por PIN.
 - `/`: redireciona para `/apostador`.
 
+Repositorio e deploy:
+
+- GitHub: `https://github.com/prifabiojorge/bolao-copa-2026`
+- Branch de producao: `main`
+- Vercel: projeto `bolao-copa-2026`
+- Dominio Vercel observado: `bolao-copa-2026-ebon.vercel.app`
+
 Servidor local validado:
 
 - `http://127.0.0.1:3000/apostador`
@@ -38,6 +65,12 @@ PIN local padrao:
 - `2026`
 
 Esse PIN pode ser trocado por variavel de ambiente `ADMIN_PIN`.
+
+Estado de dados atual em 23/06/2026:
+
+- `initialPool`: bolao limpo, sem palpites.
+- `seedPool`: copia de referencia com os 8 palpites originais.
+- `data/bolao-state.json`: estado local de runtime; no momento da revisao estava sem palpites.
 
 ## O que o apostador deve ver
 
@@ -78,6 +111,7 @@ Na tela `/admin`, depois de entrar com PIN, ele pode:
 - Ver pendentes primeiro.
 - Publicar resultado oficial.
 - Ver ganhadores por placar exato.
+- Ver cenario sem ganhadores, quando o premio liquido fica acumulado para a banca/organizador.
 - Exportar CSV.
 - Exportar JSON.
 - Copiar link do apostador.
@@ -91,7 +125,7 @@ O projeto segue uma separacao simples:
 
 - Interface: componentes React.
 - Dominio: regras do bolao, calculos e orquestracao.
-- Persistencia: arquivo JSON server-side.
+- Persistencia: Supabase opcional ou arquivo JSON server-side como fallback.
 - API: rotas Next.js.
 - Sessao admin: cookie HttpOnly assinado.
 
@@ -108,6 +142,7 @@ Mapa de pastas importantes:
 - `src/features/bolao/data/initialPool.ts`: dados iniciais do bolao informado pelo usuario.
 - `src/features/bolao/hooks/usePoolApi.ts`: hook cliente que conversa com as APIs.
 - `src/server/poolStore.ts`: leitura/gravacao server-side do estado.
+- `src/server/supabaseClient.ts`: cliente Supabase opcional, usado quando as variaveis de ambiente existem.
 - `src/server/adminSession.ts`: PIN, cookie e validacao da sessao admin.
 - `data/bolao-state.json`: estado atual gerado em runtime.
 - `memoria/`: historico, decisoes e evidencias.
@@ -137,11 +172,14 @@ Invariantes importantes:
 
 ## Persistencia
 
-A persistencia atual e server-side, em arquivo:
+A persistencia atual e server-side com dois modos:
 
-- `data/bolao-state.json`
+- Supabase, quando `NEXT_PUBLIC_SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` estao configuradas.
+- Arquivo local `data/bolao-state.json`, quando as variaveis Supabase nao existem.
 
-Se o arquivo nao existir, o servidor inicializa com `initialPool`.
+Em desenvolvimento local, o fallback em arquivo JSON e o caminho mais simples.
+
+Se o arquivo nao existir, o servidor inicializa com `initialPool`, que atualmente e um bolao limpo sem palpites.
 
 Escrita:
 
@@ -151,6 +189,14 @@ Escrita:
 Isso reduz risco de arquivo parcial.
 
 Observacao: o arquivo `data/bolao-state.json` e ignorado pelo git, porque e estado de runtime.
+
+Observacao sobre Supabase:
+
+- A tabela esperada e `bolao_state`.
+- O registro usado e singleton, com `id = 1`.
+- O campo principal e `state`.
+- A chave `SUPABASE_SERVICE_ROLE_KEY` deve ficar apenas no servidor.
+- O fallback para JSON so acontece quando as variaveis Supabase nao existem. Se elas existem e a conexao falha, o erro sobe.
 
 ## APIs
 
@@ -183,6 +229,11 @@ Para producao real, trocar obrigatoriamente:
 - `ADMIN_PIN`
 - `SESSION_SECRET`
 
+Se usar Supabase, configurar tambem:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
+
 ## Correcao de hidratacao
 
 O erro visto pelo usuario era:
@@ -213,6 +264,19 @@ Na lista publica, cada palpite mostra:
 - status `Pago` ou `Pendente`
 
 Importante: nao voltar a usar emoji de bandeira para esse ponto. No ambiente do usuario, emoji apareceu como letras `BR` e `MA`.
+
+## Regra atual de premio
+
+Antes do resultado oficial:
+
+- Mostra projecao.
+- Ganhadores ainda nao sao calculados.
+
+Depois do resultado oficial:
+
+- Se houver palpite pago com placar exato, o premio liquido e dividido entre os ganhadores.
+- Se nao houver palpite pago com placar exato, o premio liquido fica como acumulado para a banca/organizador.
+- Se nao houver nenhum palpite pago, nao ha premio nem comissao.
 
 ## Como rodar
 
@@ -246,6 +310,13 @@ npm audit --omit=dev
 npm run build
 ```
 
+Resultado mais recente em 23/06/2026:
+
+- `npm run typecheck`: passou.
+- `npm audit --omit=dev`: passou, 0 vulnerabilidades.
+- `npm run build`: passou com variaveis Supabase vazias.
+- `npm test`: falhou sem relatorio detalhado do Vitest. Reproduzido tambem ao rodar arquivos isolados, inclusive com variaveis Supabase vazias. Investigar runner/ambiente antes de confiar nos testes.
+
 Tambem foram feitos testes com Playwright/Chrome:
 
 - `/apostador` sem overlay de hydration error.
@@ -263,6 +334,10 @@ Unitarios de dominio:
 - limite de 2 empates por participante.
 - pendentes fora da premiacao.
 - reset do bolao.
+- cenario aguardando resultado.
+- cenario sem palpites pagos.
+- cenario sem ganhadores.
+- cenario com ganhadores.
 
 API:
 
@@ -270,6 +345,8 @@ API:
 - `POST /api/guesses` registra palpite pendente.
 - rotas admin retornam `401` sem cookie.
 - login com PIN correto libera acao admin.
+
+Total esperado pelo codigo atual: 13 testes, sendo 9 de dominio e 4 de API.
 
 ## Evidencias visuais
 
@@ -287,12 +364,17 @@ Logs:
 - `memoria/dev-server.log`
 - `memoria/dev-server.err.log`
 
+Endosso:
+
+- `memoria/endosso-2026-06-23.md`
+
 ## Pendencias e proximos passos possiveis
 
 O MVP esta funcional. Melhorias futuras possiveis:
 
 - Criar logout do admin.
 - Guardar sessao visual do admin depois de recarregar a pagina.
+- Investigar por que o Vitest falhou sem relatorio em 23/06/2026.
 - Adicionar banco real se houver multi-instancia.
 - Adicionar Pix manual com chave e comprovante, sem pagamento automatico.
 - Criar pagina ou token secreto para admin em vez de link visivel.

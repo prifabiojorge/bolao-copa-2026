@@ -29,6 +29,8 @@ Esta pasta existe para manter resiliencia da execucao. Se a sessao cair, o proxi
 - [x] Remover bloco tecnico `Orquestrador / Arquiteto` da tela do apostador.
 - [x] Trocar emojis de bandeira por mini bandeiras CSS na lista publica.
 - [x] Consolidar memoria do projeto para continuidade por outra IA.
+- [x] Revisitar workspace e memoria em 23/06/2026.
+- [x] Endossar memoria com ajustes sobre Supabase, seedPool, initialPool limpo e premio acumulado.
 
 ## Resultado
 
@@ -43,3 +45,13 @@ MVP atualizado para admin/apostador, com hidratacao corrigida e validado em `htt
 - Browser: fluxo `/apostador` -> `/admin` -> `/apostador` passou com atributo externo no `<html>` e sem erro de hidratacao.
 - Screenshots: `memoria/screenshot-apostador-desktop.png`, `memoria/screenshot-admin-desktop.png` e `memoria/screenshot-apostador-mobile.png`.
 - UX apostador: sem link para admin, sem painel tecnico, lista publica com mini bandeiras CSS.
+
+## Revisao de 23/06/2026
+
+- Memoria revisitada e endossada.
+- Codigo conferido nos pontos principais: layout, store, Supabase, sessao admin, dominio, UI publica e testes.
+- `npm run typecheck`: passou.
+- `npm audit --omit=dev`: 0 vulnerabilidades.
+- `npm run build`: passou com variaveis Supabase vazias.
+- `npm test`: falhou sem relatorio detalhado do Vitest; pendencia aberta para investigacao.
+- Estado runtime local conferido em `data/bolao-state.json`: bolao limpo, sem palpites.
