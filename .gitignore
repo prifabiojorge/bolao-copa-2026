@@ -8,3 +8,4 @@ coverage
 *.tsbuildinfo
 data/bolao-state.json
 data/bolao-state.json.tmp
+data/*.backup.json

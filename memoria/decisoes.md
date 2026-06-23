@@ -28,7 +28,7 @@ Motivo: o participante precisa de uma experiencia direta: regras, palpite, statu
 
 ## ADR-005 - Mini bandeiras em CSS, nao emoji
 
-Decisao: a lista publica usa mini bandeiras desenhadas em CSS para Brasil e Marrocos.
+Decisao: a lista publica usa mini bandeiras desenhadas em CSS para Escocia e Brasil.
 
 Motivo: no ambiente do usuario, emojis de bandeira apareceram como letras `BR` e `MA`. CSS torna a exibicao estavel em Windows, Chrome e outros ambientes.
 

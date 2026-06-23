@@ -2,7 +2,7 @@
 
 ## Funcionais
 
-- Registrar palpites para Brasil x Marrocos.
+- Registrar palpites para Escocia x Brasil.
 - Marcar pagamento como pendente ou pago.
 - Separar ambiente publico do apostador e ambiente do administrador.
 - Calcular total bruto pago.
@@ -17,7 +17,7 @@
 - Exportar lista em CSV e JSON.
 - Proteger acoes administrativas por PIN local e cookie HttpOnly.
 - Esconder links e informacoes administrativas da tela do apostador.
-- Mostrar Brasil x Marrocos com mini bandeiras na lista publica.
+- Mostrar Escocia x Brasil com mini bandeiras na lista publica.
 
 ## Nao Funcionais
 

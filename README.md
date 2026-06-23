@@ -1,6 +1,6 @@
 # Bolao da Copa 2026
 
-Micro-SaaS para administrar o bolao Brasil x Marrocos, em 13/06/2026 as 19:00, com foco em transparencia e confiabilidade.
+Micro-SaaS para administrar o bolao Escocia x Brasil, em 24/06/2026 as 19:00, com foco em transparencia e confiabilidade.
 
 ## Rodar localmente
 
@@ -35,7 +35,7 @@ npm run build
 - Responsavel recebe 20% do total pago.
 - Premio liquido fica em 80% do total pago.
 - Apenas palpites pagos competem.
-- Palpites sao bloqueados a partir de 13/06/2026 as 19:00, America/Fortaleza.
+- Palpites sao bloqueados a partir de 24/06/2026 as 19:00, America/Fortaleza.
 - Auditoria visivel registra mudancas operacionais.
 - Estado sincronizado via Supabase opcional ou arquivo local `data/bolao-state.json`.
 - Acoes administrativas protegidas por PIN e cookie HttpOnly.

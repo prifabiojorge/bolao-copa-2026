@@ -47,7 +47,14 @@ function downloadTextFile(fileName: string, content: string, mimeType: string) {
 }
 
 function poolToCsv(pool: Pool) {
-  const header = ["ordem", "nome", "brasil", "marrocos", "pagamento", "criado_em"];
+  const header = [
+    "ordem",
+    "nome",
+    pool.match.homeTeam.toLocaleLowerCase("pt-BR"),
+    pool.match.awayTeam.toLocaleLowerCase("pt-BR"),
+    "pagamento",
+    "criado_em"
+  ];
   const rows = pool.guesses.map((guess) => [
     guess.order,
     guess.participantName,
@@ -154,6 +161,19 @@ function PaymentChip({ guess }: { guess: Guess }) {
   );
 }
 
+function formatMatchScore(pool: Pool, homeScore: number, awayScore: number) {
+  return `${pool.match.homeTeam} ${homeScore} x ${awayScore} ${pool.match.awayTeam}`;
+}
+
+function slugifyFileName(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("pt-BR")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 function MatchHero({ pool }: { pool: Pool }) {
   return (
     <div className="match-hero">
@@ -164,9 +184,15 @@ function MatchHero({ pool }: { pool: Pool }) {
             Regras claras antes do jogo
           </span>
           <h1 className="match-title">
-            <span className="country-tag">BRA</span> {pool.match.homeTeam}{" "}
-            <span className="versus">x</span> {pool.match.awayTeam}{" "}
-            <span className="country-tag">MAR</span>
+            <span className="match-team-name">
+              <MiniFlag code={pool.match.homeFlag} label={pool.match.homeTeam} />
+              {pool.match.homeTeam}
+            </span>{" "}
+            <span className="versus">x</span>{" "}
+            <span className="match-team-name">
+              <MiniFlag code={pool.match.awayFlag} label={pool.match.awayTeam} />
+              {pool.match.awayTeam}
+            </span>
           </h1>
           <p className="match-meta">
             {formatKickoff(pool.match.kickoffAt)}. Cada palpite custa{" "}
@@ -320,7 +346,7 @@ function PrizeOutcomePanel({
           </span>
           <h3 className="prize-outcome-title">{label}</h3>
           <p className="prize-outcome-subtitle">
-            Placar oficial: Brasil {pool.officialResult?.homeScore} x {pool.officialResult?.awayScore} Marrocos. Nenhum palpite acertou em cheio.
+            Placar oficial: {formatMatchScore(pool, pool.officialResult?.homeScore ?? 0, pool.officialResult?.awayScore ?? 0)}. Nenhum palpite acertou em cheio.
           </p>
         </div>
         <div className="prize-grid">
@@ -365,7 +391,7 @@ function PrizeOutcomePanel({
         </span>
         <h3 className="prize-outcome-title">{label}</h3>
         <p className="prize-outcome-subtitle">
-          Placar oficial: Brasil {pool.officialResult?.homeScore} x {pool.officialResult?.awayScore} Marrocos.
+          Placar oficial: {formatMatchScore(pool, pool.officialResult?.homeScore ?? 0, pool.officialResult?.awayScore ?? 0)}.
         </p>
       </div>
       <div className="prize-grid">
@@ -377,7 +403,7 @@ function PrizeOutcomePanel({
                 <div className="winner-info">
                   <span className="winner-name">{allocation.guess.participantName}</span>
                   <span className="winner-guess-tag">
-                    Palpite: Brasil {allocation.guess.homeScore} x {allocation.guess.awayScore} Marrocos
+                    Palpite: {formatMatchScore(pool, allocation.guess.homeScore, allocation.guess.awayScore)}
                   </span>
                 </div>
                 <div className="winner-prize-amount">
@@ -444,14 +470,16 @@ function StatusPanel({
 
 function GuessForm({
   locked,
+  pool,
   onSubmit
 }: {
   locked: boolean;
+  pool: Pool;
   onSubmit: (draft: { participantName: string; homeScore: number; awayScore: number }) => Promise<ApiMessage>;
 }) {
   const [participantName, setParticipantName] = useState("");
-  const [homeScore, setHomeScore] = useState("2");
-  const [awayScore, setAwayScore] = useState("1");
+  const [homeScore, setHomeScore] = useState("0");
+  const [awayScore, setAwayScore] = useState("2");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -463,8 +491,8 @@ function GuessForm({
 
     if (outcome.accepted) {
       setParticipantName("");
-      setHomeScore("2");
-      setAwayScore("1");
+      setHomeScore("0");
+      setAwayScore("2");
     }
   }
 
@@ -487,7 +515,7 @@ function GuessForm({
         <span className="step-badge">2</span>
         <div className="score-inputs">
           <div className="field">
-            <label htmlFor="homeScore">Brasil</label>
+            <label htmlFor="homeScore">{pool.match.homeTeam}</label>
             <input
               disabled={locked}
               id="homeScore"
@@ -501,7 +529,7 @@ function GuessForm({
           </div>
           <span className="score-x">x</span>
           <div className="field">
-            <label htmlFor="awayScore">Marrocos</label>
+            <label htmlFor="awayScore">{pool.match.awayTeam}</label>
             <input
               disabled={locked}
               id="awayScore"
@@ -526,8 +554,10 @@ function GuessForm({
   );
 }
 
-function MiniFlag({ country }: { country: "br" | "ma" }) {
-  if (country === "br") {
+function MiniFlag({ code, label }: { code: string; label: string }) {
+  const normalizedCode = code.toLocaleUpperCase("pt-BR");
+
+  if (normalizedCode === "BRA") {
     return (
       <span className="mini-flag br" role="img" aria-label="Bandeira do Brasil">
         <span className="mini-flag-br-diamond" aria-hidden="true" />
@@ -536,14 +566,25 @@ function MiniFlag({ country }: { country: "br" | "ma" }) {
     );
   }
 
+  if (normalizedCode === "SCO") {
+    return (
+      <span className="mini-flag scotland" role="img" aria-label={`Bandeira de ${label}`}>
+        <span className="mini-flag-scotland-diagonal one" aria-hidden="true" />
+        <span className="mini-flag-scotland-diagonal two" aria-hidden="true" />
+      </span>
+    );
+  }
+
   return (
-    <span className="mini-flag ma" role="img" aria-label="Bandeira de Marrocos">
-      <span className="mini-flag-ma-star" aria-hidden="true" />
+    <span className="mini-flag fallback" role="img" aria-label={`Bandeira de ${label}`}>
+      <span className="mini-flag-fallback-code" aria-hidden="true">
+        {normalizedCode.slice(0, 3)}
+      </span>
     </span>
   );
 }
 
-function PublicGuessList({ guesses }: { guesses: Guess[] }) {
+function PublicGuessList({ guesses, pool }: { guesses: Guess[]; pool: Pool }) {
   return (
     <div className="public-list">
       {guesses
@@ -555,15 +596,15 @@ function PublicGuessList({ guesses }: { guesses: Guess[] }) {
             <strong>{guess.participantName}</strong>
             <span className="score-cell">
               <span className="team-label">
-                <MiniFlag country="br" />
-                Brasil
+                <MiniFlag code={pool.match.homeFlag} label={pool.match.homeTeam} />
+                {pool.match.homeTeam}
               </span>
               <span className="score-numbers">
                 {guess.homeScore} x {guess.awayScore}
               </span>
               <span className="team-label">
-                Marrocos
-                <MiniFlag country="ma" />
+                {pool.match.awayTeam}
+                <MiniFlag code={pool.match.awayFlag} label={pool.match.awayTeam} />
               </span>
             </span>
             <PaymentChip guess={guess} />
@@ -631,7 +672,7 @@ export function ApostadorApp() {
                 <p>Preencha, confira o placar e envie. O pagamento sera confirmado pelo responsavel.</p>
               </div>
             </div>
-            <GuessForm locked={locked} onSubmit={registerGuess} />
+            <GuessForm locked={locked} pool={pool} onSubmit={registerGuess} />
             <div className="form-grid form-feedback">
               <MessageBox
                 message={
@@ -649,7 +690,7 @@ export function ApostadorApp() {
                 <p>Todos acompanham os palpites e quais ja estao pagos.</p>
               </div>
             </div>
-            <PublicGuessList guesses={pool.guesses} />
+            <PublicGuessList guesses={pool.guesses} pool={pool} />
           </div>
         </section>
       </div>
@@ -709,9 +750,11 @@ function AdminLogin({
 
 function AdminGuessTable({
   guesses,
+  pool,
   onSetPayment
 }: {
   guesses: Guess[];
+  pool: Pool;
   onSetPayment: (guessId: string, paymentStatus: Guess["paymentStatus"]) => Promise<ApiMessage>;
 }) {
   const sortedGuesses = useMemo(
@@ -736,7 +779,7 @@ function AdminGuessTable({
             <span className="guess-order">#{guess.order}</span>
             <strong>{guess.participantName}</strong>
             <span className="score-cell">
-              Brasil {guess.homeScore} x {guess.awayScore} Marrocos
+              {formatMatchScore(pool, guess.homeScore, guess.awayScore)}
             </span>
           </div>
           <PaymentChip guess={guess} />
@@ -764,6 +807,7 @@ function AdminTools({
   onReset: () => Promise<ApiMessage>;
 }) {
   const [copied, setCopied] = useState(false);
+  const exportSlug = slugifyFileName(pool.title || pool.id || "bolao");
 
   async function copyLink() {
     const link = `${window.location.origin}/apostador`;
@@ -777,7 +821,7 @@ function AdminTools({
       <button
         className="button secondary"
         type="button"
-        onClick={() => downloadTextFile("bolao-brasil-marrocos.csv", `\uFEFF${poolToCsv(pool)}`, "text/csv")}
+        onClick={() => downloadTextFile(`${exportSlug}.csv`, `\uFEFF${poolToCsv(pool)}`, "text/csv")}
       >
         <Download size={17} />
         CSV
@@ -786,7 +830,7 @@ function AdminTools({
         className="button secondary"
         type="button"
         onClick={() =>
-          downloadTextFile("bolao-brasil-marrocos.json", JSON.stringify(pool, null, 2), "application/json")
+          downloadTextFile(`${exportSlug}.json`, JSON.stringify(pool, null, 2), "application/json")
         }
       >
         <FileJson size={17} />
@@ -813,8 +857,8 @@ function ResultPanel({
   prizeOutcome: ReturnType<typeof usePoolApi>["prizeOutcome"];
   onPublish: (homeScore: number, awayScore: number) => Promise<ApiMessage>;
 }) {
-  const [homeScore, setHomeScore] = useState("2");
-  const [awayScore, setAwayScore] = useState("1");
+  const [homeScore, setHomeScore] = useState("0");
+  const [awayScore, setAwayScore] = useState("2");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -832,7 +876,7 @@ function ResultPanel({
       <form className="result-box" onSubmit={handleSubmit}>
         <div className="score-inputs">
           <div className="field">
-            <label htmlFor="resultHomeScore">Brasil</label>
+            <label htmlFor="resultHomeScore">{pool.match.homeTeam}</label>
             <input
               id="resultHomeScore"
               inputMode="numeric"
@@ -844,7 +888,7 @@ function ResultPanel({
           </div>
           <span className="score-x">x</span>
           <div className="field">
-            <label htmlFor="resultAwayScore">Marrocos</label>
+            <label htmlFor="resultAwayScore">{pool.match.awayTeam}</label>
             <input
               id="resultAwayScore"
               inputMode="numeric"
@@ -950,7 +994,7 @@ export function AdminApp() {
                 <p>Pendentes aparecem primeiro para acelerar a rotina do responsavel.</p>
               </div>
             </div>
-            <AdminGuessTable guesses={pool.guesses} onSetPayment={setPayment} />
+            <AdminGuessTable guesses={pool.guesses} pool={pool} onSetPayment={setPayment} />
           </div>
           <div className="section-stack">
             <ResultPanel pool={pool} prizeOutcome={prizeOutcome} onPublish={publishResult} />

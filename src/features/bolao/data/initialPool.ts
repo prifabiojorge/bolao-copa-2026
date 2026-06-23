@@ -1,19 +1,19 @@
 import type { Pool } from "../domain/types";
 
-const kickoffAt = "2026-06-13T19:00:00-03:00";
+const kickoffAt = "2026-06-24T19:00:00-03:00";
 
 export const initialPool: Pool = {
-  id: "bolao-brasil-marrocos-2026",
-  title: "Bolao da Copa 2026 - Brasil x Marrocos",
+  id: "bolao-escocia-brasil-2026",
+  title: "Bolao da Copa 2026 - Escocia x Brasil",
   responsibleName: "Responsavel do bolao",
   match: {
-    homeTeam: "Brasil",
-    awayTeam: "Marrocos",
-    homeFlag: "BRA",
-    awayFlag: "MAR",
+    homeTeam: "Esc\u00f3cia",
+    awayTeam: "Brasil",
+    homeFlag: "SCO",
+    awayFlag: "BRA",
     kickoffAt,
     timezone: "America/Fortaleza",
-    venue: "New York/New Jersey Stadium"
+    venue: "Copa do Mundo da FIFA 2026"
   },
   rules: {
     stakeCents: 1000,

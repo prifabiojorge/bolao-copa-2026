@@ -13,6 +13,17 @@ Data local da revisao: 23/06/2026.
 - Conferido que a memoria foi atualizada para Supabase opcional, fallback JSON, `initialPool` limpo, `seedPool` com os 8 palpites originais e regra de premio acumulado sem ganhadores.
 - Conferido que `data/bolao-state.json` estava limpo, com `guesses: []`, em 23/06/2026.
 
+## Atualizacao Escocia x Brasil - 23/06/2026
+
+- `npm run typecheck` passou.
+- `npm run build` passou com variaveis Supabase vazias.
+- `npm audit --omit=dev` retornou 0 vulnerabilidades.
+- `npm test` continua falhando sem relatorio detalhado do Vitest.
+- Supabase `bolao_state.id = 1` foi atualizado para `bolao-escocia-brasil-2026`.
+- Estado remoto validado com 0 palpites e 1 log de configuracao.
+- Browser local validado em `/apostador`: mostra Escocia x Brasil, nao mostra Marrocos, exibe 2 mini bandeiras no titulo e nao tem overflow desktop/mobile.
+- Screenshot: `memoria/screenshot-escocia-brasil-apostador.png`.
+
 ## Comandos Historicos de 13/06/2026
 
 - `npm run typecheck` passou.
@@ -34,7 +45,7 @@ Verificacoes com Chrome via Playwright:
 - Limpeza: estado restaurado para os 8 palpites iniciais depois do teste.
 - UX apostador: sem link para `/admin` no topo.
 - UX apostador: sem bloco `Orquestrador / Arquiteto`.
-- Lista publica: placar exibe Brasil x Marrocos com mini bandeiras em CSS, sem texto `BR`/`MA`.
+- Lista publica: placar exibe Escocia x Brasil com mini bandeiras em CSS, sem depender de emoji.
 
 ## Artefatos
 

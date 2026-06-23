@@ -2,12 +2,12 @@
 
 ## Objetivo
 
-Construir um micro-SaaS para administrar o bolao Brasil x Marrocos da Copa de 2026, com foco em transparencia, confiabilidade e rastreabilidade.
+Construir um micro-SaaS para administrar o bolao Escocia x Brasil da Copa de 2026, com foco em transparencia, confiabilidade e rastreabilidade.
 
 ## Evento
 
-- Jogo: Brasil x Marrocos
-- Data: 13/06/2026
+- Jogo: Escocia x Brasil
+- Data: 24/06/2026
 - Horario do bolao: 19:00, America/Fortaleza
 - Valor por palpite: R$ 10,00
 - Limite: ate 2 palpites de empate por participante

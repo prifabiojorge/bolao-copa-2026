@@ -126,7 +126,7 @@ export function runPoolEvent(
         audit(
           event.actor,
           "Palpite registrado",
-          `${guess.participantName}: Brasil ${guess.homeScore} x ${guess.awayScore} Marrocos`,
+          `${guess.participantName}: ${pool.match.homeTeam} ${guess.homeScore} x ${guess.awayScore} ${pool.match.awayTeam}`,
           timestamp
         )
       )
@@ -180,11 +180,11 @@ export function runPoolEvent(
   const resultErrors: string[] = [];
 
   if (!Number.isInteger(event.payload.homeScore) || event.payload.homeScore < 0) {
-    resultErrors.push("Resultado do Brasil invalido.");
+    resultErrors.push(`Resultado do ${pool.match.homeTeam} invalido.`);
   }
 
   if (!Number.isInteger(event.payload.awayScore) || event.payload.awayScore < 0) {
-    resultErrors.push("Resultado do Marrocos invalido.");
+    resultErrors.push(`Resultado do ${pool.match.awayTeam} invalido.`);
   }
 
   if (resultErrors.length > 0) {
@@ -207,7 +207,7 @@ export function runPoolEvent(
     audit(
       event.actor,
       "Resultado publicado",
-      `Resultado oficial: Brasil ${event.payload.homeScore} x ${event.payload.awayScore} Marrocos.`,
+      `Resultado oficial: ${pool.match.homeTeam} ${event.payload.homeScore} x ${event.payload.awayScore} ${pool.match.awayTeam}.`,
       timestamp
     )
   );

@@ -51,11 +51,11 @@ export function validateGuessDraft(pool: Pool, draft: GuessDraft, now = new Date
   }
 
   if (!Number.isInteger(draft.homeScore) || draft.homeScore < 0 || draft.homeScore > 20) {
-    errors.push("O placar do Brasil precisa ser um numero inteiro entre 0 e 20.");
+    errors.push(`O placar do ${pool.match.homeTeam} precisa ser um numero inteiro entre 0 e 20.`);
   }
 
   if (!Number.isInteger(draft.awayScore) || draft.awayScore < 0 || draft.awayScore > 20) {
-    errors.push("O placar do Marrocos precisa ser um numero inteiro entre 0 e 20.");
+    errors.push(`O placar do ${pool.match.awayTeam} precisa ser um numero inteiro entre 0 e 20.`);
   }
 
   if (draft.homeScore === draft.awayScore && normalizedName) {

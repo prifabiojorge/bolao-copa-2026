@@ -22,13 +22,29 @@ Ajustes importantes desta revisao:
 - `memoria/dev-server.err.log` mostra `Supabase read error: TypeError: fetch failed`; se Supabase estiver configurado e inacessivel, o app nao faz fallback automatico para JSON.
 - A URL `https://hotjqxymmmlurnpkgipq.supabase.co` foi conferida em `.env.local` e a tabela `bolao_state` respondeu com sucesso via service role local.
 
+## Atualizacao do jogo - 23/06/2026
+
+O app foi adaptado para o jogo `Escocia x Brasil`.
+
+Dados atuais do bolao:
+
+- Jogo: Escocia x Brasil.
+- Data do jogo: 24/06/2026.
+- Horario limite: 19:00, fuso `America/Fortaleza`.
+- Mandante: Escocia, flag code `SCO`.
+- Visitante: Brasil, flag code `BRA`.
+- Estado inicial: lista de palpites limpa.
+- Supabase: registro `bolao_state.id = 1` foi reiniciado para o novo jogo.
+- Backup do estado remoto anterior foi salvo localmente em `data/*.backup.json`, ignorado pelo Git.
+- Acento de `Escocia` e exibido no app via Unicode: `Esc\u00f3cia`.
+
 ## Ideia do produto
 
-O projeto e um micro-SaaS simples para administrar um bolao privado do jogo Brasil x Marrocos da Copa 2026.
+O projeto e um micro-SaaS simples para administrar um bolao privado do jogo Escocia x Brasil da Copa 2026.
 
 Dados originais do bolao:
 
-- Data do jogo: 13/06/2026.
+- Data do jogo: 24/06/2026.
 - Horario limite: 19:00, fuso `America/Fortaleza`.
 - Valor: R$ 10,00 por palpite.
 - Regra especial: cada participante so pode ter ate 2 palpites de empate.
@@ -84,7 +100,7 @@ Na tela publica, o apostador deve ver:
 - Formulario de palpite em poucos passos.
 - Lista publica dos palpites.
 - Status de pagamento de cada palpite.
-- Placar exibido como `Brasil x Marrocos`, com mini bandeiras visuais.
+- Placar exibido como `Escocia x Brasil`, com mini bandeiras visuais.
 
 O apostador nao deve ver:
 
@@ -97,7 +113,7 @@ Decisoes recentes de UI:
 
 - O topo da tela do apostador nao mostra mais os botoes `Apostador` e `Admin`.
 - O bloco `Orquestrador / Arquiteto` foi removido da tela do apostador.
-- As bandeiras da lista publica nao usam emoji, porque no Windows podem aparecer como letras `BR` e `MA`. Elas sao desenhadas em CSS por `.mini-flag.br` e `.mini-flag.ma`.
+- As bandeiras da lista publica nao usam emoji, porque no Windows podem aparecer como letras em vez da bandeira. Elas sao desenhadas em CSS por `.mini-flag.scotland` e `.mini-flag.br`.
 
 ## O que o administrador deve ver
 
@@ -256,11 +272,11 @@ Na lista publica, cada palpite mostra:
 
 - ordem
 - nome
-- mini bandeira do Brasil
-- texto `Brasil`
+- mini bandeira da Escocia
+- texto `Escocia`
 - placar
-- texto `Marrocos`
-- mini bandeira de Marrocos
+- texto `Brasil`
+- mini bandeira do Brasil
 - status `Pago` ou `Pendente`
 
 Importante: nao voltar a usar emoji de bandeira para esse ponto. No ambiente do usuario, emoji apareceu como letras `BR` e `MA`.
@@ -387,6 +403,6 @@ Nao quebrar essas preferencias do usuario:
 
 - Apostador nao deve ver botao `Admin`.
 - Apostador nao deve ver `Orquestrador` nem `Arquiteto`.
-- Lista publica deve mostrar Brasil x Marrocos com mini bandeiras reais via CSS, nao emoji.
+- Lista publica deve mostrar Escocia x Brasil com mini bandeiras reais via CSS, nao emoji.
 - Produto deve parecer transparente e confiavel, nao uma bet.
 - Manter tudo simples para uso no celular.

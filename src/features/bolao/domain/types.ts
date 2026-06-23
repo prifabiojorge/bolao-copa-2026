@@ -2,8 +2,8 @@ export type PaymentStatus = "paid" | "pending";
 export type GuessSource = "seed" | "manual";
 
 export interface MatchInfo {
-  homeTeam: "Brasil";
-  awayTeam: "Marrocos";
+  homeTeam: string;
+  awayTeam: string;
   homeFlag: string;
   awayFlag: string;
   kickoffAt: string;

@@ -55,3 +55,12 @@ MVP atualizado para admin/apostador, com hidratacao corrigida e validado em `htt
 - `npm run build`: passou com variaveis Supabase vazias.
 - `npm test`: falhou sem relatorio detalhado do Vitest; pendencia aberta para investigacao.
 - Estado runtime local conferido em `data/bolao-state.json`: bolao limpo, sem palpites.
+
+## Atualizacao de 23/06/2026 - Escocia x Brasil
+
+- App adaptado do confronto Brasil x Marrocos para Escocia x Brasil.
+- Data limite atualizada para 24/06/2026 as 19:00, America/Fortaleza.
+- UI passou a usar os times do estado em vez de textos fixos.
+- Mini bandeira da Escocia adicionada em CSS.
+- Supabase `bolao_state.id = 1` reiniciado para o novo jogo, com 0 palpites.
+- Backup do estado remoto anterior salvo localmente em `data/*.backup.json`.

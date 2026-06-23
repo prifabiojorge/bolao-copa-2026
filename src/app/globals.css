@@ -194,6 +194,17 @@ input:disabled {
   color: var(--green);
 }
 
+.match-team-name {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.18em;
+}
+
+.match-title .mini-flag {
+  height: 0.44em;
+  width: 0.66em;
+}
+
 .country-tag {
   align-items: center;
   background: #eef6f1;
@@ -638,30 +649,39 @@ tbody tr:hover {
   width: 5px;
 }
 
-.mini-flag.ma {
-  background: #c1272d;
+.mini-flag.scotland {
+  background: #0065bd;
 }
 
-.mini-flag-ma-star {
-  background: #007a3d;
-  clip-path: polygon(
-    50% 0%,
-    61% 35%,
-    98% 35%,
-    68% 56%,
-    79% 91%,
-    50% 70%,
-    21% 91%,
-    32% 56%,
-    2% 35%,
-    39% 35%
-  );
-  height: 10px;
+.mini-flag-scotland-diagonal {
+  background: #fff;
+  height: 3px;
   left: 50%;
   position: absolute;
   top: 50%;
-  transform: translate(-50%, -50%);
-  width: 10px;
+  width: 28px;
+}
+
+.mini-flag-scotland-diagonal.one {
+  transform: translate(-50%, -50%) rotate(34deg);
+}
+
+.mini-flag-scotland-diagonal.two {
+  transform: translate(-50%, -50%) rotate(-34deg);
+}
+
+.mini-flag.fallback {
+  align-items: center;
+  background: #f6f8f7;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.mini-flag-fallback-code {
+  color: var(--muted);
+  font-size: 0.42rem;
+  font-weight: 900;
+  line-height: 1;
 }
 
 .score-numbers {
@@ -1222,4 +1242,3 @@ tbody tr:hover {
 .projection-value.bank-value {
   color: #7c5c02;
 }
-

@@ -86,7 +86,7 @@ describe("bolao rules", () => {
         homeScore: 1,
         awayScore: 0
       },
-      new Date("2026-06-13T19:00:01-03:00")
+      new Date("2026-06-24T19:00:01-03:00")
     );
 
     expect(result.valid).toBe(false);
