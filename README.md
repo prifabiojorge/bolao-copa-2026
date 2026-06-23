@@ -30,7 +30,7 @@ npm run build
 
 ## Regras implementadas
 
-- R$ 10,00 por palpite.
+- R$ 5,00 por palpite.
 - Maximo de 2 empates por participante.
 - Responsavel recebe 20% do total pago.
 - Premio liquido fica em 80% do total pago.

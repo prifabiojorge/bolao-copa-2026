@@ -43,3 +43,9 @@ Motivo: permite restaurar o bolao para uma lista vazia sem perder a referencia h
 Decisao: se o resultado oficial for publicado e nenhum palpite pago acertar o placar exato, o premio liquido fica como acumulado para a banca/organizador.
 
 Motivo: a interface passou a explicar explicitamente o cenario sem ganhadores. Essa regra deve continuar clara para evitar duvida depois do jogo.
+
+## ADR-008 - Valor do palpite em R$ 5,00
+
+Decisao: o valor vigente do palpite para Escocia x Brasil e R$ 5,00, representado no dominio como `stakeCents = 500`.
+
+Motivo: o usuario substituiu o valor anterior de R$ 10,00. Toda regra financeira deve partir desse valor para manter transparencia entre apostador, administrador e Supabase.

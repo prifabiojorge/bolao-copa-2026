@@ -46,7 +46,7 @@ Dados originais do bolao:
 
 - Data do jogo: 24/06/2026.
 - Horario limite: 19:00, fuso `America/Fortaleza`.
-- Valor: R$ 10,00 por palpite.
+- Valor: R$ 5,00 por palpite.
 - Regra especial: cada participante so pode ter ate 2 palpites de empate.
 - Responsavel do bolao recebe 20% do total pago.
 - Premio liquido para vencedores: 80% do total pago.

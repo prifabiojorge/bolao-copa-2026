@@ -25,7 +25,7 @@ export const harnessArchitecture = {
     ]
   },
   invariants: [
-    "Valor por palpite: R$ 10,00",
+    "Valor por palpite: R$ 5,00",
     "Comissao do responsavel: 20%",
     "Premio: 80% do total pago",
     "Somente palpites pagos competem"

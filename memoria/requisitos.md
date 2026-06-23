@@ -3,6 +3,7 @@
 ## Funcionais
 
 - Registrar palpites para Escocia x Brasil.
+- Mostrar e calcular cada palpite com valor de R$ 5,00.
 - Marcar pagamento como pendente ou pago.
 - Separar ambiente publico do apostador e ambiente do administrador.
 - Calcular total bruto pago.

@@ -15,9 +15,9 @@ describe("bolao rules", () => {
 
     expect(ledger.paidGuesses).toHaveLength(3);
     expect(ledger.pendingGuesses).toHaveLength(5);
-    expect(ledger.grossCents).toBe(3000);
-    expect(ledger.organizerFeeCents).toBe(600);
-    expect(ledger.prizePoolCents).toBe(2400);
+    expect(ledger.grossCents).toBe(1500);
+    expect(ledger.organizerFeeCents).toBe(300);
+    expect(ledger.prizePoolCents).toBe(1200);
   });
 
   it("rejects more than two draw guesses for the same participant", () => {
@@ -73,7 +73,7 @@ describe("bolao rules", () => {
 
     expect(distribution).toHaveLength(1);
     expect(distribution[0].guess.participantName).toBe("Ozeas");
-    expect(distribution[0].amountCents).toBe(2400);
+    expect(distribution[0].amountCents).toBe(1200);
   });
 
   it("locks new guesses after the match deadline", () => {
@@ -120,11 +120,11 @@ describe("bolao rules", () => {
       const outcome = calculatePrizeOutcome(pool);
       expect(outcome.scenario).toBe("awaiting_result");
       expect(outcome.winners).toHaveLength(0);
-      expect(outcome.grossCents).toBe(3000); // 3 paid guesses * 1000
-      expect(outcome.organizerCommissionCents).toBe(600); // 20% fee
-      expect(outcome.prizePoolCents).toBe(2400);
+      expect(outcome.grossCents).toBe(1500); // 3 paid guesses * 500
+      expect(outcome.organizerCommissionCents).toBe(300); // 20% fee
+      expect(outcome.prizePoolCents).toBe(1200);
       expect(outcome.unclaimedPrizeCents).toBe(0);
-      expect(outcome.organizerTotalCents).toBe(600);
+      expect(outcome.organizerTotalCents).toBe(300);
     });
 
     it("returns no_paid_guesses if there are no paid guesses in the pool", () => {
@@ -147,11 +147,11 @@ describe("bolao rules", () => {
       const outcome = calculatePrizeOutcome(pool);
       expect(outcome.scenario).toBe("no_winners");
       expect(outcome.winners).toHaveLength(0);
-      expect(outcome.grossCents).toBe(3000);
-      expect(outcome.organizerCommissionCents).toBe(600);
-      expect(outcome.prizePoolCents).toBe(2400);
-      expect(outcome.unclaimedPrizeCents).toBe(2400); // Unclaimed goes to bank
-      expect(outcome.organizerTotalCents).toBe(3000); // Commission + Unclaimed
+      expect(outcome.grossCents).toBe(1500);
+      expect(outcome.organizerCommissionCents).toBe(300);
+      expect(outcome.prizePoolCents).toBe(1200);
+      expect(outcome.unclaimedPrizeCents).toBe(1200); // Unclaimed goes to bank
+      expect(outcome.organizerTotalCents).toBe(1500); // Commission + Unclaimed
     });
 
     it("returns winners_found when one or more paid guesses match", () => {
@@ -163,12 +163,12 @@ describe("bolao rules", () => {
       expect(outcome.scenario).toBe("winners_found");
       expect(outcome.winners).toHaveLength(1);
       expect(outcome.winners[0].guess.participantName).toBe("Ozeas");
-      expect(outcome.winners[0].amountCents).toBe(2400);
-      expect(outcome.grossCents).toBe(3000);
-      expect(outcome.organizerCommissionCents).toBe(600);
-      expect(outcome.prizePoolCents).toBe(2400);
+      expect(outcome.winners[0].amountCents).toBe(1200);
+      expect(outcome.grossCents).toBe(1500);
+      expect(outcome.organizerCommissionCents).toBe(300);
+      expect(outcome.prizePoolCents).toBe(1200);
       expect(outcome.unclaimedPrizeCents).toBe(0);
-      expect(outcome.organizerTotalCents).toBe(600);
+      expect(outcome.organizerTotalCents).toBe(300);
     });
   });
 });

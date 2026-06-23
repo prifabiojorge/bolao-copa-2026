@@ -24,6 +24,20 @@ Data local da revisao: 23/06/2026.
 - Browser local validado em `/apostador`: mostra Escocia x Brasil, nao mostra Marrocos, exibe 2 mini bandeiras no titulo e nao tem overflow desktop/mobile.
 - Screenshot: `memoria/screenshot-escocia-brasil-apostador.png`.
 
+## Atualizacao Valor R$ 5,00 - 23/06/2026
+
+- Codigo e documentacao principal atualizados para R$ 5,00 por palpite.
+- `initialPool.rules.stakeCents` atualizado para `500`.
+- Supabase `bolao_state.id = 1` atualizado para `rules.stakeCents = 500`.
+- Estado local `data/bolao-state.json` sincronizado com o valor novo.
+- `GET /api/pool` local retornou `rules.stakeCents = 500`.
+- `npm run typecheck` passou.
+- `npm audit --omit=dev` retornou 0 vulnerabilidades.
+- `npm run build` passou com variaveis Supabase vazias.
+- `npm test` continua falhando sem relatorio detalhado alem do banner do Vitest.
+- Browser local validado em `/apostador`: mostra Escocia x Brasil, mostra `R$ 5,00` via formatacao `Intl.NumberFormat` com espaco nao separavel, nao mostra `R$ 10,00`, nao mostra Marrocos/MAR, sem erros de console e sem overflow desktop/mobile.
+- Screenshot: `memoria/screenshot-escocia-brasil-r5-apostador.png`.
+
 ## Comandos Historicos de 13/06/2026
 
 - `npm run typecheck` passou.

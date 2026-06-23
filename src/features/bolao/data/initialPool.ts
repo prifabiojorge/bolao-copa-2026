@@ -16,7 +16,7 @@ export const initialPool: Pool = {
     venue: "Copa do Mundo da FIFA 2026"
   },
   rules: {
-    stakeCents: 1000,
+    stakeCents: 500,
     organizerFeeRate: 0.2,
     maxDrawGuessesPerParticipant: 2,
     lockAt: kickoffAt,

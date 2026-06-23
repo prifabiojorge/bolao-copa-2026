@@ -64,3 +64,15 @@ MVP atualizado para admin/apostador, com hidratacao corrigida e validado em `htt
 - Mini bandeira da Escocia adicionada em CSS.
 - Supabase `bolao_state.id = 1` reiniciado para o novo jogo, com 0 palpites.
 - Backup do estado remoto anterior salvo localmente em `data/*.backup.json`.
+
+## Atualizacao de 23/06/2026 - Valor R$ 5,00
+
+- Valor do palpite alterado de R$ 10,00 para R$ 5,00.
+- Regra central atualizada em `initialPool.rules.stakeCents = 500`.
+- Testes de regra ajustados para arrecadacao, comissao de 20% e premio liquido de 80% com base em R$ 5,00.
+- Supabase `bolao_state.id = 1` atualizado com `rules.stakeCents = 500`.
+- Auditoria remota recebeu log `Valor do palpite atualizado`.
+- Verificacao final: typecheck, audit e build passaram; browser confirmou R$ 5,00 na tela do apostador.
+- Arte lateral antiga substituida por campo CSS dinamico para nao manter rastro visual de Marrocos/MAR.
+- Asset `public/bolao-field.png` regenerado para Escocia x Brasil.
+- `npm test` manteve a falha silenciosa ja registrada na revisao anterior.

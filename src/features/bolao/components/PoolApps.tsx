@@ -216,7 +216,18 @@ function MatchHero({ pool }: { pool: Pool }) {
         </div>
       </div>
       <div className="match-art" aria-hidden="true">
-        <img src="/bolao-field.png" alt="" />
+        <div className="pitch-panel">
+          <div className="pitch-team pitch-team-home">
+            <MiniFlag code={pool.match.homeFlag} label={pool.match.homeTeam} />
+            <span>{pool.match.homeTeam}</span>
+          </div>
+          <div className="pitch-center-mark">x</div>
+          <div className="pitch-team pitch-team-away">
+            <MiniFlag code={pool.match.awayFlag} label={pool.match.awayTeam} />
+            <span>{pool.match.awayTeam}</span>
+          </div>
+          <div className="pitch-caption">transparencia + auditoria</div>
+        </div>
       </div>
     </div>
   );
